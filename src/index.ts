@@ -13,7 +13,7 @@ connectionDb();
 userEndPonit();
 app.get("/get/namePizze", async (req: express.Request, res: express.Response) => {
     const db = client.db("mall");
-    const collection = db.collection("tipiPizze");
+    const collection = db.collection("typePizze");
     const products = await collection.find({}).toArray();
 
     res.status(200).json(products);
@@ -23,7 +23,7 @@ app.get("/get/namePizze", async (req: express.Request, res: express.Response) =>
 app.get("/get/pizza/:id", async (req: express.Request, res: express.Response) => {
     const id = req.params.id;
     const db = client.db("mall");
-    const collection = db.collection("tipiPizze");
+    const collection = db.collection("typePizze");
     const pizza = await collection.findOne({ _id: new ObjectId(id) });
 
     if (pizza) {
@@ -33,30 +33,7 @@ app.get("/get/pizza/:id", async (req: express.Request, res: express.Response) =>
     }
 })
 
-app.get("/get/images", async (req: Request, res: express.Response) => {
-    const db = client.db("mall");
-    const collection = db.collection("immagini");
-    const images = await collection.find({}).toArray();
 
-    res.status(200).send(images);
-    // console.log("get funziona");
-})
-
-app.post("/post/image", async (req: Request, res: express.Response) => {
-    const db = client.db("mall");
-    const collection = db.collection("immagini");
-    const body = req.body;
-
-    try {
-        if (body)
-            await collection.insertOne(body);
-        res.status(200).send("succes");
-    } catch (err) {
-        console.log("error", err);
-        res.status(404).send({ "error": err });
-    }
-
-})
 
 //order
 app.post("/post/order", async (req: express.Request, res: express.Response) => {
