@@ -45,17 +45,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.client = void 0;
 exports.connectionDb = connectionDb;
 const MongoDB = __importStar(require("mongodb"));
-exports.client = new MongoDB.MongoClient('mongodb://localhost:27017');
+const url = "mongodb+srv://gianlucabattaglia06:2TY398TG8gQAUJT9@cluster0.qdxx7qq.mongodb.net/mall?retryWrites=true&w=majority&appName=Cluster0";
+exports.client = new MongoDB.MongoClient(url);
 function connectionDb() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield exports.client.connect();
-            const db = exports.client.db('mall');
-            const collection = db.collection('book'); //crete or use collection
-            console.log('connect created with succes');
+            console.log('✅ Connessione a MongoDB Atlas riuscita!');
         }
         catch (error) {
-            console.log("error ", error);
+            console.log("❌ Errore di connessione: ", error);
         }
     });
 }
