@@ -1,16 +1,19 @@
 import { client, connectionDb } from "./connectionDB";
-const port: number = 8080;
 import express = require("express");
 import { userEndPonit } from "./user";
-const cors = require("cors");
-export const app: any = express();
 import { ObjectId } from "mongodb"
-import e = require("express");
+export { express };
+export const app: any = express();
+
+const cors = require("cors");
+let PORT:string | undefined = process.env.PORT;
+if(PORT == undefined) PORT = "8080";
 app.use(cors());
 app.use(express.json());
 
 connectionDb();
 userEndPonit();
+
 app.get("/get/namePizze", async (req: express.Request, res: express.Response) => {
     const db = client.db("mall");
     const collection = db.collection("typePizze");
@@ -80,8 +83,9 @@ app.get("/get/order/:idUser", async (req: express.Request, res: express.Response
 
 
 // Avvio del server
-app.listen(port, () => { 
-    console.log(`Server avviato su http://localhost:${port}`);
+
+app.listen(PORT, () => { 
+    console.log(`Server avviato su http://localhost:${PORT}`);
 });
-export { express };
+
 

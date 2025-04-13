@@ -9,22 +9,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.express = exports.app = void 0;
+exports.app = exports.express = void 0;
 const connectionDB_1 = require("./connectionDB");
-const port = 8080;
 const express = require("express");
 exports.express = express;
 const user_1 = require("./user");
-const cors = require("cors");
-exports.app = express();
 const mongodb_1 = require("mongodb");
+exports.app = express();
+const cors = require("cors");
+let PORT = process.env.PORT;
+if (PORT == undefined)
+    PORT = "8080";
 exports.app.use(cors());
 exports.app.use(express.json());
 (0, connectionDB_1.connectionDb)();
 (0, user_1.userEndPonit)();
 exports.app.get("/get/namePizze", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const db = connectionDB_1.client.db("mall");
-    const collection = db.collection("tipiPizze");
+    const collection = db.collection("typePizze");
     const products = yield collection.find({}).toArray();
     res.status(200).json(products);
     // console.log("La GET funziona!");
@@ -32,34 +34,13 @@ exports.app.get("/get/namePizze", (req, res) => __awaiter(void 0, void 0, void 0
 exports.app.get("/get/pizza/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
     const db = connectionDB_1.client.db("mall");
-    const collection = db.collection("tipiPizze");
+    const collection = db.collection("typePizze");
     const pizza = yield collection.findOne({ _id: new mongodb_1.ObjectId(id) });
     if (pizza) {
         res.status(200).json(pizza);
     }
     else {
         res.status(404).json({ message: "Pizza non trovata" });
-    }
-}));
-exports.app.get("/get/images", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const db = connectionDB_1.client.db("mall");
-    const collection = db.collection("immagini");
-    const images = yield collection.find({}).toArray();
-    res.status(200).send(images);
-    // console.log("get funziona");
-}));
-exports.app.post("/post/image", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const db = connectionDB_1.client.db("mall");
-    const collection = db.collection("immagini");
-    const body = req.body;
-    try {
-        if (body)
-            yield collection.insertOne(body);
-        res.status(200).send("succes");
-    }
-    catch (err) {
-        console.log("error", err);
-        res.status(404).send({ "error": err });
     }
 }));
 //order
@@ -102,6 +83,6 @@ exports.app.get("/get/order/:idUser", (req, res) => __awaiter(void 0, void 0, vo
     }
 }));
 // Avvio del server
-exports.app.listen(port, () => {
-    console.log(`Server avviato su http://localhost:${port}`);
+exports.app.listen(PORT, () => {
+    console.log(`Server avviato su http://localhost:${PORT}`);
 });
