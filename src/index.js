@@ -69,7 +69,7 @@ exports.app.put("/put/order/:idorder", (req, res) => __awaiter(void 0, void 0, v
     const body = req.body;
     console.log("ID ordine:", idOrder);
     try {
-        yield collection.updateOne({ _id: new mongodb_1.ObjectId(idOrder) }, { $set: body });
+        yield collection.updateOne({ _id: new mongodb_1.ObjectId(idOrder) }, { $addToSet: { idPizze: { $each: body.idPizze } } });
         res.status(200).send({ message: "Ordine aggiornato con successo" });
     }
     catch (err) {
