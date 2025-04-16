@@ -89,9 +89,9 @@ app.get("/get/order/:idUser", async (req: express.Request, res: express.Response
         const order = await collection.find({ userId: idUser }).toArray();
         
         console.log(order);
-        if(order.length != 0) {
+        if(order) {
             res.status(200).json(order);
-        }else res.status(404).json({ message: "Nessun ordine trovato" });
+        }else res.status(404).json({ message: false});
     } catch (err) {
         console.error("Errore durante il recupero della order:", err);
         res.status(500).send({ message: "Errore del server" });
