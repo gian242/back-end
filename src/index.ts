@@ -67,7 +67,7 @@ app.put("/put/order/:idorder",async(req: express.Request, res: express.Response)
     console.log("ID ordine:", idOrder);
    
     try{
-        await collection.updateOne({ _id: new ObjectId(idOrder) }, { $set: body });
+        await collection.updateOne({ _id: new ObjectId(idOrder) }, { $set:{"idPizze": body } });
         res.status(200).send({ message: "Ordine aggiornato con successo" });
     }catch(err){
         console.error("Errore durante l'aggiornamento dell'ordine:", err);
