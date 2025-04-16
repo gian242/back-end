@@ -59,6 +59,22 @@ app.get("/get/orders", async (req: express.Request, res: express.Response) => {
     res.status(200).send(orders);
 })
 
+app.put("/put/order/:idorder",async(req: express.Request, res: express.Response) => {
+    const db = client.db("mall");
+    const collection = db.collection("order");
+    const idOrder = req.params.idorder;
+    const body = req.body;
+    console.log("ID ordine:", idOrder);
+   
+    try{
+        await collection.updateOne({ _id: new ObjectId(idOrder) }, { $set: body });
+        res.status(200).send({ message: "Ordine aggiornato con successo" });
+    }catch(err){
+        console.error("Errore durante l'aggiornamento dell'ordine:", err);
+        res.status(500).send({ message: "Errore del server" });
+    }
+    })
+
 app.get("/get/order/:idUser", async (req: express.Request, res: express.Response) => {
     try {
         const idUser = req.params.idUser;

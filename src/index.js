@@ -62,6 +62,21 @@ exports.app.get("/get/orders", (req, res) => __awaiter(void 0, void 0, void 0, f
     const orders = yield collection.find({}).toArray();
     res.status(200).send(orders);
 }));
+exports.app.put("/put/order/:idorder", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const db = connectionDB_1.client.db("mall");
+    const collection = db.collection("order");
+    const idOrder = req.params.idorder;
+    const body = req.body;
+    console.log("ID ordine:", idOrder);
+    try {
+        yield collection.updateOne({ _id: new mongodb_1.ObjectId(idOrder) }, { $set: body });
+        res.status(200).send({ message: "Ordine aggiornato con successo" });
+    }
+    catch (err) {
+        console.error("Errore durante l'aggiornamento dell'ordine:", err);
+        res.status(500).send({ message: "Errore del server" });
+    }
+}));
 exports.app.get("/get/order/:idUser", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const idUser = req.params.idUser;

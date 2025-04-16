@@ -51,10 +51,10 @@ function connectionDb() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield exports.client.connect();
-            console.log('✅ Connessione a MongoDB Atlas riuscita!');
+            console.log(' Connessione a MongoDB Atlas riuscita!');
         }
         catch (error) {
-            console.log("❌ Errore di connessione: ", error);
+            console.log(" Errore di connessione: ", error);
         }
     });
 }
