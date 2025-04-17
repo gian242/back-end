@@ -68,8 +68,13 @@ exports.app.put("/put/order/:idorder", (req, res) => __awaiter(void 0, void 0, v
     const idOrder = req.params.idorder;
     const body = req.body;
     console.log("ID ordine:", idOrder);
+    console.log("body quantita", body.quantita);
     try {
-        yield collection.updateOne({ _id: new mongodb_1.ObjectId(idOrder) }, { $addToSet: { idPizze: { $each: body.idPizze } } });
+        const result = yield collection.updateOne({ _id: new mongodb_1.ObjectId(idOrder) }, { $addToSet: {
+                idPizze: { $each: body.idPizze },
+                quantita: { $each: body.quantita }
+            } });
+        console.log("Risultato dell'aggiornamento:", result);
         res.status(200).send({ message: "Ordine aggiornato con successo" });
     }
     catch (err) {
@@ -86,11 +91,11 @@ exports.app.get("/get/order/:idUser", (req, res) => __awaiter(void 0, void 0, vo
         console.log("ID utente:", new mongodb_1.ObjectId(idUser));
         const order = yield collection.find({ userId: idUser }).toArray();
         console.log(order);
-        if (order.length != 0) {
+        if (order) {
             res.status(200).json(order);
         }
         else
-            res.status(404).json({ message: "Nessun ordine trovato" });
+            res.status(404).json({ message: false });
     }
     catch (err) {
         console.error("Errore durante il recupero della order:", err);
