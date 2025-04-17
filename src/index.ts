@@ -38,6 +38,23 @@ app.get("/get/pizza/:id", async (req: express.Request, res: express.Response) =>
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//products
+
 //order
 
 app.get("/get/orders", async (req: express.Request, res: express.Response) => {
