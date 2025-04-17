@@ -85,10 +85,10 @@ app.put("/put/order/:idorder", async (req: express.Request, res: express.Respons
             { _id: new ObjectId(idOrder) },
             {
                 $addToSet: {
-                    idPizze: { $each: body.idPizze }
+                    idPizze: { $each: body.campi.idPizze },
                 },
                 $push: {
-                    quantita: { $each: body.quantita }
+                    quantita: { $each: body.campi.quantita }
                 } as any
             }
         );
