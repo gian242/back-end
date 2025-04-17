@@ -44,43 +44,11 @@ exports.app.get("/get/pizza/:id", (req, res) => __awaiter(void 0, void 0, void 0
     }
 }));
 //order
-exports.app.post("/post/order", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const db = connectionDB_1.client.db("mall");
-    const collection = db.collection("order");
-    const body = req.body;
-    try {
-        collection.insertOne(body);
-        res.status(200).send({ "succes": "operazione effetuata con sucesso" });
-    }
-    catch (err) {
-        res.status(404).send({ "error": err });
-    }
-}));
 exports.app.get("/get/orders", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const db = connectionDB_1.client.db("mall");
     const collection = db.collection("order");
     const orders = yield collection.find({}).toArray();
     res.status(200).send(orders);
-}));
-exports.app.put("/put/order/:idorder", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const db = connectionDB_1.client.db("mall");
-    const collection = db.collection("order");
-    const idOrder = req.params.idorder;
-    const body = req.body;
-    console.log("ID ordine:", idOrder);
-    console.log("body quantita", body.quantita);
-    try {
-        const result = yield collection.updateOne({ _id: new mongodb_1.ObjectId(idOrder) }, { $addToSet: {
-                idPizze: { $each: body.idPizze },
-                quantita: { $each: body.quantita }
-            } });
-        console.log("Risultato dell'aggiornamento:", result);
-        res.status(200).send({ message: "Ordine aggiornato con successo" });
-    }
-    catch (err) {
-        console.error("Errore durante l'aggiornamento dell'ordine:", err);
-        res.status(500).send({ message: "Errore del server" });
-    }
 }));
 exports.app.get("/get/order/:idUser", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -100,6 +68,43 @@ exports.app.get("/get/order/:idUser", (req, res) => __awaiter(void 0, void 0, vo
     catch (err) {
         console.error("Errore durante il recupero della order:", err);
         res.status(500).send({ message: "Errore del server" });
+    }
+}));
+exports.app.put("/put/order/:idorder", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const db = connectionDB_1.client.db("mall");
+    const collection = db.collection("order");
+    const idOrder = req.params.idorder;
+    const body = req.body;
+    console.log("ID ordine:", idOrder);
+    console.log("body quantita", body.quantita);
+    try {
+        const result = yield collection.updateOne({ _id: new mongodb_1.ObjectId(idOrder) }, {
+            $addToSet: {
+                idPizze: { $each: body.idPizze }
+            },
+            $push: {
+                quantita: { $each: body.quantita }
+            }
+        });
+        console.log("Risultato dell'aggiornamento:", result);
+        res.status(200).send({ message: "Ordine aggiornato con successo" });
+    }
+    catch (err) {
+        console.error("Errore durante l'aggiornamento dell'ordine:", err);
+        res.status(500).send({ message: "Errore del server", err });
+    }
+}));
+exports.app.post("/post/order", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const db = connectionDB_1.client.db("mall");
+    const collection = db.collection("order");
+    const body = req.body;
+    console.log("body", body);
+    try {
+        collection.insertOne(body);
+        res.status(200).send({ "succes": "operazione effetuata con sucesso" });
+    }
+    catch (err) {
+        res.status(404).send({ "error": err });
     }
 }));
 // Avvio del server

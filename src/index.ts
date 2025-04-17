@@ -85,16 +85,18 @@ app.put("/put/order/:idorder", async (req: express.Request, res: express.Respons
             { _id: new ObjectId(idOrder) },
             {
                 $addToSet: {
-                    idPizze: { $each: body.idPizze },
+                    idPizze: { $each: body.idPizze }
+                },
+                $push: {
                     quantita: { $each: body.quantita }
-                }
+                } as any
             }
         );
         console.log("Risultato dell'aggiornamento:", result);
         res.status(200).send({ message: "Ordine aggiornato con successo" });
     } catch (err) {
         console.error("Errore durante l'aggiornamento dell'ordine:", err);
-        res.status(500).send({ message: "Errore del server" });
+        res.status(500).send({ message: "Errore del server",err });
     }
 })
 
